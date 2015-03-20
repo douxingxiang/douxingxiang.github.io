@@ -1,0 +1,1007 @@
+<!doctype html>
+<html class="theme-next use-motion">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.3.0"/>
+
+
+
+
+	<meta name="keywords" content="TypeScript," />
+
+  <title> TypeScript接口 // 这里看见一个世界 </title>
+</head>
+
+<body>
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+    <a href="/" class="brand">
+        <span class="logo">
+          <i class="icon-logo"></i>
+        </span>
+        <span class="site-title">这里看见一个世界</span>
+    </a>
+</h1>
+
+
+  <ul id="menu" class="menu">
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="/">
+          <i class="menu-item-icon icon-home"></i> <br />
+          首页
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="/archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          归档
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="/tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          标签
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-about">
+        <a href="/about">
+          <i class="menu-item-icon icon-about"></i> <br />
+          关于
+        </a>
+      </li>
+    
+  </ul>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+            
+          
+
+          <div id="posts" class="posts-expand">
+            
+  
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              TypeScript接口
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          
+            发表于 2015-03-08
+          
+        </span>
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/03/08/TypeScript/2015-03-08-typescript-handbook-02-interfaces/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/03/08/TypeScript/2015-03-08-typescript-handbook-02-interfaces/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    
+      <div class="post-body">
+
+        
+        
+
+        
+          <blockquote>
+<p>声明：原文来自<a href="http://www.typescriptlang.org/Handbook#interfaces" target="_blank" rel="external">TypeScript官网</a>，本文仅作为中文入门之用。</p>
+</blockquote>
+<h1 id="接口">接口</h1><p>TypeScript的一个核心原则在于类型检查关注值所具有的“形状”上。有时候称作“鸭子类型（duck typing）”或“结构化子类型（structural subtyping）”。TypeScript中，接口担任着对类型进行命名的角色，不管是在自己代码内部定义约定（constract），还是定义与项目之外代码的约定上，都很强大。</p>
+<a id="more"></a> 
+<h2 id="第一个接口">第一个接口</h2><p>理解接口工作的最简单方式就是看个简单例子：</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">printLabel</span><span class="params">(labelledObj: {label: string})</span> </span>{
+  <span class="built_in">console</span>.log(labelledObj.label);
+}
+
+<span class="keyword">var</span> myObj = {size: <span class="number">10</span>, label: <span class="string">"Size 10 Object"</span>};
+printLabel(myObj);
+</code></pre><p>我们可以再次编写相同的例子，这次使用接口来描述包含一个字符串类型<code>label</code>属性的需求：</p>
+<pre><code><span class="interface"><span class="keyword">interface</span> LabelledValue </span>{
+  label: <span class="built_in">string</span>;
+}
+
+<span class="function"><span class="keyword">function</span> <span class="title">printLabel</span><span class="params">(labelledObj: LabelledValue)</span> </span>{
+  <span class="built_in">console</span>.log(labelledObj.label);
+}
+
+<span class="keyword">var</span> myObj = {size: <span class="number">10</span>, label: <span class="string">"Size 10 Object"</span>};
+printLabel(myObj);
+</code></pre><p><code>LabelledValue</code>接口现在可以用于描述上例中的要求了。它仍然表示包含单个字符串类型的<code>label</code>属性的意思。注意，我们没必要像其他语言一样，显式声明传递给<code>printLabel</code>的对象参数实现了这个接口。这里，只有形状才有关系。如果传递给函数的对象满足了列出的要求，就是允许的。</p>
+<p>需要指出的是类型检查器并不要求属性的顺序，只要接口所要求的属性存在、类型匹配就可以。</p>
+<h2 id="可选属性">可选属性</h2><p>接口中并不是所有属性都是必须的。有些只有满足一定条件才存在，也可能根本不需要。在以下情形下可选属性会很流行：当创建一个类似“选项口袋（option bags）”的模式时，用户可以传递一个仅设置了部分属性的对象给函数。</p>
+<p>下面是这个模式的例子：</p>
+<pre><code><span class="class"><span class="keyword">interface</span> <span class="title">SquareConfig</span> </span>{
+  color?: string;
+  width?: number;
+}
+
+<span class="function"><span class="keyword">function</span> <span class="title">createSquare</span><span class="params">(config: SquareConfig)</span><span class="type">: {color</span><span class="type">: string</span></span>; area: number} {
+  <span class="keyword">var</span> newSquare = {color: <span class="string">"white"</span>, area: <span class="number">100</span>};
+  <span class="keyword">if</span> (config.color) {
+    newSquare.color = config.color;
+  }
+  <span class="keyword">if</span> (config.width) {
+    newSquare.area = config.width * config.width;
+  }
+  <span class="keyword">return</span> newSquare;
+}
+
+<span class="keyword">var</span> mySquare = createSquare({color: <span class="string">"black"</span>});
+</code></pre><p>包含可选属性的接口与其他接口的写法类似，每个可选属性的声明中需要加个<code>?</code>。</p>
+<p>可选属性的优势是，你可以描述可能出现的属性，也能捕获不期望出现的属性。比如，我们拼错了传给<code>createSquare</code>的属性名，然后得到一个错误消息：</p>
+<pre><code><span class="class"><span class="keyword">interface</span> <span class="title">SquareConfig</span> </span>{
+  color?: string;
+  width?: number;
+}
+
+<span class="function"><span class="keyword">function</span> <span class="title">createSquare</span><span class="params">(config: SquareConfig)</span><span class="type">: {color</span><span class="type">: string</span></span>; area: number} {
+  <span class="keyword">var</span> newSquare = {color: <span class="string">"white"</span>, area: <span class="number">100</span>};
+  <span class="keyword">if</span> (config.color) {
+    newSquare.color = config.collor;  <span class="comment">// 类型检查器可以在这里捕获拼错的名字</span>
+  }
+  <span class="keyword">if</span> (config.width) {
+    newSquare.area = config.width * config.width;
+  }
+  <span class="keyword">return</span> newSquare;
+}
+
+<span class="keyword">var</span> mySquare = createSquare({color: <span class="string">"black"</span>});  
+</code></pre><h2 id="函数类型">函数类型</h2><p>接口可以描述很多JavaScript对象能支持的“形状”。除了描述包含属性的对象外，接口也可以描述函数类型。</p>
+<p>要用接口来描述函数类型，我们需要给接口一个调用签名。它类似函数声明，但只有参数列表和返回类型。</p>
+<pre><code><span class="class"><span class="keyword">interface</span> <span class="title">SearchFunc</span> {</span>
+  (<span class="string">source:</span> string, <span class="string">subString:</span> string): <span class="typename">boolean</span>;
+}
+</code></pre><p>一旦定义，我们就可以像其他接口一样使用函数类型接口。这里，我们演示如何创建一个函数类型的变量，然后给它赋值一个相同类型的函数值。</p>
+<pre><code><span class="keyword">var</span> mySearch: <span class="type">SearchFunc</span>;
+mySearch = function(source: <span class="type">string</span>, subString: <span class="type">string</span>) {
+  <span class="keyword">var</span> <span class="literal">result</span> = source.search(subString);
+  <span class="keyword">if</span> (<span class="literal">result</span> == -<span class="number">1</span>) {
+    <span class="keyword">return</span> <span class="literal">false</span>;
+  }
+  <span class="keyword">else</span> {
+    <span class="keyword">return</span> <span class="literal">true</span>;
+  }
+}
+</code></pre><p>对于函数类型的类型检查，参数名字没必要与声明匹配。比如，我们可以这样重写上面的例子：</p>
+<pre><code><span class="keyword">var</span> mySearch: <span class="type">SearchFunc</span>;
+mySearch = function(src: <span class="type">string</span>, sub: <span class="type">string</span>) {
+  <span class="keyword">var</span> <span class="literal">result</span> = src.search(sub);
+  <span class="keyword">if</span> (<span class="literal">result</span> == -<span class="number">1</span>) {
+    <span class="keyword">return</span> <span class="literal">false</span>;
+  }
+  <span class="keyword">else</span> {
+    <span class="keyword">return</span> <span class="literal">true</span>;
+  }
+}
+</code></pre><p>函数参数只被检查一次，每个位置上参数的类型都会被一一对应检查。这里，函数表达式的返回值由它返回的值隐式给出（<em>false</em>和<em>true</em>）。如果函数表达式返回数字或字符串，类型检查器将警告我们的返回类型与SearchFunc接口声明的返回类型不匹配。</p>
+<h2 id="数组类型">数组类型</h2><p>与使用接口描述函数类型类似，我们也可以描述数组类型。数组类型包含一个<code>index</code>类型来描述能用于索引对象的类型，还有相应的用于访问索引的返回类型。</p>
+<pre><code><span class="interface"><span class="keyword">interface</span> StringArray </span>{
+  [index: <span class="built_in">number</span>]: <span class="built_in">string</span>;
+}
+
+<span class="keyword">var</span> myArray: StringArray;
+myArray = [<span class="string">"Bob"</span>, <span class="string">"Fred"</span>];
+</code></pre><p>支持两种索引类型：字符串和数字。可以同时支持两种类型的索引，但条件是数字索引返回类型必须是字符串索引返回类型的子类型。</p>
+<p>虽然索引签名在描述数组和“字典”模式上很强大，它们同时强制所有属性匹配其返回类型。本例中，属性不匹配一般化的索引，类型检查器给出了一个错误：</p>
+<pre><code><span class="tag">interface</span> <span class="tag">Dictionary</span> {
+  <span class="attr_selector">[index: string]</span>: <span class="tag">string</span>;
+  <span class="attribute">length</span>: number;    <span class="comment">// 错误，“length”类型不是索引的子类型</span>
+} 
+</code></pre><h2 id="类类型">类类型</h2><h3 id="实现接口">实现接口</h3><p>类似C#和Java这些语言，TypeScript也同样支持接口最常见的用法（显式要求类满足特定的约定）。</p>
+<pre><code><span class="interface"><span class="keyword">interface</span> ClockInterface </span>{
+    currentTime: <span class="built_in">Date</span>;
+}
+
+<span class="keyword">class</span> Clock <span class="keyword">implements</span> ClockInterface  {
+    currentTime: <span class="built_in">Date</span>;
+    <span class="constructor"><span class="keyword">constructor</span>(h: number, m: number) </span>{ }
+}
+</code></pre><p>你可以在类中实现接口来描述方法，就像下面例子中<code>setTime</code>：</p>
+<pre><code><span class="interface"><span class="keyword">interface</span> ClockInterface </span>{
+    currentTime: <span class="built_in">Date</span>;
+    setTime(d: <span class="built_in">Date</span>);
+}
+
+<span class="keyword">class</span> Clock <span class="keyword">implements</span> ClockInterface  {
+    currentTime: <span class="built_in">Date</span>;
+    setTime(d: <span class="built_in">Date</span>) {
+        <span class="keyword">this</span>.currentTime = d;
+    }
+    <span class="constructor"><span class="keyword">constructor</span>(h: number, m: number) </span>{ }
+}
+</code></pre><p>接口描述类公共的部分，而不是公共、私有两部分。因此你不能使用接口来检查一个类实例的私有部分是否包含某些特定类型。</p>
+<h3 id="类的静态/实例部分的区别">类的静态/实例部分的区别</h3><p>处理类和接口时，需要记住类有<em>两种</em>类型：静态的和实例的。你可能注意到了，如果你使用构造器签名来创建一个接口，然后尝试创建一个类来实现这个接口时，就会得到一个错误：</p>
+<pre><code><span class="interface"><span class="keyword">interface</span> ClockInterface </span>{
+    <span class="keyword">new</span> (hour: <span class="built_in">number</span>, minute: <span class="built_in">number</span>);
+}
+
+<span class="keyword">class</span> Clock <span class="keyword">implements</span> ClockInterface  {
+    currentTime: <span class="built_in">Date</span>;
+    <span class="constructor"><span class="keyword">constructor</span>(h: number, m: number) </span>{ }
+}
+</code></pre><p>因为当类实现接口时，只会检查类的实例部分。由于构造器属于静态部分，因此不会被检查。</p>
+<p>相反，你需要直接处理类的“静态”部分。本例中，我们直接处理类：</p>
+<pre><code><span class="interface"><span class="keyword">interface</span> ClockStatic </span>{
+    <span class="keyword">new</span> (hour: <span class="built_in">number</span>, minute: <span class="built_in">number</span>);
+}
+
+<span class="keyword">class</span> Clock  {
+    currentTime: <span class="built_in">Date</span>;
+    <span class="constructor"><span class="keyword">constructor</span>(h: number, m: number) </span>{ }
+}
+
+<span class="keyword">var</span> cs: ClockStatic = Clock;
+<span class="keyword">var</span> newClock = <span class="keyword">new</span> cs(<span class="number">7</span>, <span class="number">30</span>);
+</code></pre><h2 id="扩展接口">扩展接口</h2><p>与类相似，接口也可以相互扩展。扩展将会把一个接口中的成员拷贝到另一个，给予你更大自由来抽取接口到可重用组件。</p>
+<pre><code><span class="class"><span class="keyword">interface</span> <span class="title">Shape</span> </span>{
+    color: string;
+}
+
+<span class="class"><span class="keyword">interface</span> <span class="title">Square</span> <span class="keyword">extends</span> <span class="title">Shape</span> </span>{
+    sideLength: number;
+}
+
+<span class="keyword">var</span> square = &lt;Square&gt;{};
+square.color = <span class="string">"blue"</span>;
+square.sideLength = <span class="number">10</span>;
+</code></pre><p>接口可以通过扩展多个接口来建所有接口的组合。</p>
+<pre><code><span class="class"><span class="keyword">interface</span> <span class="title">Shape</span> </span>{
+    color: string;
+}
+
+<span class="class"><span class="keyword">interface</span> <span class="title">PenStroke</span> </span>{
+    penWidth: number;
+}
+
+<span class="class"><span class="keyword">interface</span> <span class="title">Square</span> <span class="keyword">extends</span> <span class="title">Shape</span>, <span class="title">PenStroke</span> </span>{
+    sideLength: number;
+}
+
+<span class="keyword">var</span> square = &lt;Square&gt;{};
+square.color = <span class="string">"blue"</span>;
+square.sideLength = <span class="number">10</span>;
+square.penWidth = <span class="number">5.0</span>;
+</code></pre><h2 id="混合类型">混合类型</h2><p>之前我们提到过，接口可以描述现有JavaScript中出现的丰富类型。因为JavaScript的动态和灵活特性，你可能偶尔碰到一个组合了上面所有类型的对象。</p>
+<p>例如，一个作为函数和对象的对象，同时包含额外属性：</p>
+<pre><code><span class="interface"><span class="keyword">interface</span> Counter </span>{
+    (start: <span class="built_in">number</span>): <span class="built_in">string</span>;
+    interval: <span class="built_in">number</span>;
+    reset(): <span class="built_in">void</span>;
+}
+
+<span class="keyword">var</span> c: Counter;
+c(<span class="number">10</span>);
+c.reset();
+c.interval = <span class="number">5.0</span>;
+</code></pre><p>当与第三方JavaScript打交道时，你可能需要使用上面的模式来完整地描述类型。</p>
+
+        
+      </div>
+    
+
+    
+      <div class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/TypeScript/">
+                #TypeScript
+              </a>
+            
+          </div>
+        
+
+        
+          <div class="post-nav">
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2015/03/08/TypeScript/2015-03-08-typescript-handbook-03-classes/">TypeScript类</a>
+              
+            </div>
+
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2015/03/08/TypeScript/2015-03-08-typescript-handbook-01-basic-types/">TypeScript基本类型</a>
+              
+            </div>
+          </div>
+        
+
+        
+        
+      </div>
+    
+  </div>
+
+
+
+  
+    <div class="comments" id="comments">
+      
+        <div class="ds-thread" data-thread-key="2015/03/08/TypeScript/2015-03-08-typescript-handbook-02-interfaces/"
+             data-title="TypeScript接口" data-url="http://douxingxiang.github.io/2015/03/08/TypeScript/2015-03-08-typescript-handbook-02-interfaces/">
+        </div>
+
+      
+    </div>
+  
+
+          </div>
+
+          
+        </div>
+
+        
+<div class="sidebar-toggle">
+  <div class="sidebar-toggle-line-wrap">
+    <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+  </div>
+</div>
+
+<div id="sidebar" class="sidebar">
+  <div class="sidebar-inner">
+
+    
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview" data-target="site-overview">
+          站点概览
+        </li>
+      </ul>
+    
+
+    <div class="site-overview">
+      <div class="site-author motion-element">
+        <img class="site-author-image" src="/images/douxingxiang.jpg" alt="douxingxiang" />
+        <p class="site-author-name">douxingxiang</p>
+      </div>
+      <p class="site-description motion-element"></p>
+      <div class="site-state motion-element">
+        <div class="site-state-item site-state-posts">
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </div>
+        <div class="site-state-item site-state-tags">
+            <span class="site-state-item-count">18</span>
+            <span class="site-state-item-name">标签</span>
+        </div>
+        <div class="site-state-item site-state-pages">
+            <span class="site-state-item-count">2</span>
+            <span class="site-state-item-name">页面</span>
+        </div>
+      </div>
+
+      
+
+      <div class="social-info motion-element">
+        
+          
+            <span class="social-item">
+              <a href="https://github.com/douxingxiang">GitHub</a>
+            </span>
+          
+            <span class="social-item">
+              <a href="http://weibo.com/hitdxx">Weibo</a>
+            </span>
+          
+        
+      </div>
+
+      
+      
+        <div class="cc-license motion-element">
+          <a href="http://creativecommons.org/licenses/by/4.0" class="cc-opacity" target="_blank">
+            <img src="/images/cc-by.svg" alt="Creative Commons" />
+          </a>
+        </div>
+      
+
+    </div>
+
+    
+      <div class="post-toc-wrap sidebar-panel-active">
+        <div class="post-toc-indicator-top post-toc-indicator"></div>
+        <div class="post-toc">
+          <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#接口"><span class="nav-number">1.</span> <span class="nav-text">接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一个接口"><span class="nav-number">1.1.</span> <span class="nav-text">第一个接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可选属性"><span class="nav-number">1.2.</span> <span class="nav-text">可选属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数类型"><span class="nav-number">1.3.</span> <span class="nav-text">函数类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数组类型"><span class="nav-number">1.4.</span> <span class="nav-text">数组类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类类型"><span class="nav-number">1.5.</span> <span class="nav-text">类类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实现接口"><span class="nav-number">1.5.1.</span> <span class="nav-text">实现接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类的静态/实例部分的区别"><span class="nav-number">1.5.2.</span> <span class="nav-text">类的静态/实例部分的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扩展接口"><span class="nav-number">1.6.</span> <span class="nav-text">扩展接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#混合类型"><span class="nav-number">1.7.</span> <span class="nav-text">混合类型</span></a></li></ol></li></ol>
+        </div>
+        <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+      </div>
+    
+
+  </div>
+</div>
+
+
+      </div>
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp; 
+  2015
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">douxingxiang</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 - <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT</a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(".fancybox").fancybox();
+    });
+  </script>
+
+  <script type="text/javascript">
+  function hasMobileUA () {
+    var nav = window.navigator;
+    var ua = nav.userAgent;
+    var pa = /iPad|iPhone|Android|Opera Mini|BlackBerry|webOS|UCWEB|Blazer|PSP|IEMobile|Symbian/g;
+
+    return pa.test(ua);
+  }
+
+  function isDesktop () {
+    return screen.width > 991 && !hasMobileUA();
+  }
+
+  function isTablet () {
+    return screen.width < 992 && screen.width > 767 && hasMobileUA();
+  }
+
+  function isMobile () {
+    return screen.width < 767 && hasMobileUA();
+  }
+
+  function escapeSelector (selector) {
+    return selector.replace(/[!"$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&")
+  }
+</script>
+
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  
+
+  <script type="text/javascript" id="motion.global">
+  $(document).ready(function () {
+    var body = $('body');
+    var isSidebarVisible = false;
+    var sidebarToggle = $('.sidebar-toggle');
+    var sidebarToggleLine1st = $('.sidebar-toggle-line-first')
+    var sidebarToggleLine2nd = $('.sidebar-toggle-line-middle');
+    var sidebarToggleLine3rd = $('.sidebar-toggle-line-last');
+    var sidebar = $('.sidebar');
+
+    var SIDEBAR_WIDTH = '320px';
+    var SIDEBAR_DISPLAY_DURATION = 300;
+
+    var sidebarToogleLineStatusInit = {width: '100%', opacity: 1, left: 0, rotateZ: 0, top: 0};
+
+    var sidebarToggleLine1stStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine1stStatusArrow = {width: '50%', rotateZ: '-45deg', top: '2px'};
+    var sidebarToogleLine1stStatusClose = {width: '100%', rotateZ: '-45deg', top: '5px'};
+
+    var sidebarToggleLine2ndStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine2ndStatusArrow = {width: '90%'};
+    var sidebarToogleLine2ndStatusClose = {opacity: 0};
+
+    var sidebarToggleLine3rdStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine3rdStatusArrow = {width: '50%', rotateZ: '45deg', top: '-2px'};
+    var sidebarToogleLine3rdStatusClose = {width: '100%', rotateZ: '45deg', top: '-5px'};
+
+    sidebatToggleMotion();
+    postsListMotion();
+    backToTopMotion();
+
+
+    $(document)
+      .on('sidebar.isShowing', function () {
+        isDesktop() && body.velocity(
+          {paddingRight: SIDEBAR_WIDTH},
+          SIDEBAR_DISPLAY_DURATION
+        );
+        sidebarContentMotion();
+      })
+      .on('sidebar.isHiding', function () {});
+
+
+    function backToTopMotion () {
+      var b2top = $('.back-to-top');
+      b2top.on('click', function () {
+        body.velocity('scroll');
+      });
+    }
+
+    function sidebarShowMotion () {
+
+      sidebarToggleLine1st.velocity(sidebarToogleLine1stStatusClose);
+      sidebarToggleLine2nd.velocity(sidebarToogleLine2ndStatusClose);
+      sidebarToggleLine3rd.velocity(sidebarToogleLine3rdStatusClose);
+
+      sidebar.velocity({width: SIDEBAR_WIDTH}, {
+        display: 'block',
+        duration: SIDEBAR_DISPLAY_DURATION,
+        complete: function () {
+          sidebar.addClass('sidebar-active');
+          sidebar.trigger('sidebar.didShow');
+        }
+      });
+      sidebar.trigger('sidebar.isShowing');
+    }
+
+    function sidebarHideMotion () {
+      isDesktop() && body.velocity({paddingRight: 0});
+      sidebar.velocity('reverse');
+
+      sidebarToggleLine1st.velocity(sidebarToggleLine1stStatusInit);
+      sidebarToggleLine2nd.velocity(sidebarToggleLine2ndStatusInit);
+      sidebarToggleLine3rd.velocity(sidebarToggleLine3rdStatusInit);
+
+      sidebar.removeClass('sidebar-active');
+      sidebar.trigger('sidebar.isHiding');
+    };
+
+    function sidebarContentMotion () {
+      $('.sidebar .motion-element').velocity(
+        'transition.slideRightIn',
+        {stagger: 50, drag: true}
+      );
+    }
+
+    function postsListMotion () {
+      var postMotionOptions = postMotionOptions || {stagger: 300, drag: true};
+      $('.post').velocity('transition.slideDownIn', postMotionOptions);
+    }
+
+    function sidebatToggleMotion () {
+      sidebarToggle.on('click', function () {
+        isSidebarVisible ? sidebarHideMotion() : sidebarShowMotion();
+        isSidebarVisible = !isSidebarVisible;
+      });
+
+      sidebarToggle.hover(function () {
+        if (isSidebarVisible) {return}
+        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusArrow);
+        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusArrow);
+        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusArrow);
+      }, function () {
+        if (isSidebarVisible) {return}
+        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusInit);
+        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusInit);
+        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusInit);
+      });
+    }
+  });
+
+</script>
+
+
+
+
+
+  
+  
+<script type="text/javascript" id="bootstrap.scrollspy.custom">
+  /* ========================================================================
+  * Bootstrap: scrollspy.js v3.3.2
+  * http://getbootstrap.com/javascript/#scrollspy
+  * ========================================================================
+  * Copyright 2011-2015 Twitter, Inc.
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+  * ======================================================================== */
+
+  /**
+   * Custom by iissnan
+   *
+   * - Add a `clear.bs.scrollspy` event.
+   * - Esacpe targets selector.
+   */
+
+
+  +function ($) {
+    'use strict';
+
+    // SCROLLSPY CLASS DEFINITION
+    // ==========================
+
+    function ScrollSpy(element, options) {
+      this.$body          = $(document.body)
+      this.$scrollElement = $(element).is(document.body) ? $(window) : $(element)
+      this.options        = $.extend({}, ScrollSpy.DEFAULTS, options)
+      this.selector       = (this.options.target || '') + ' .nav li > a'
+      this.offsets        = []
+      this.targets        = []
+      this.activeTarget   = null
+      this.scrollHeight   = 0
+
+      this.$scrollElement.on('scroll.bs.scrollspy', $.proxy(this.process, this))
+      this.refresh()
+      this.process()
+    }
+
+    ScrollSpy.VERSION  = '3.3.2'
+
+    ScrollSpy.DEFAULTS = {
+      offset: 10
+    }
+
+    ScrollSpy.prototype.getScrollHeight = function () {
+      return this.$scrollElement[0].scrollHeight || Math.max(this.$body[0].scrollHeight, document.documentElement.scrollHeight)
+    }
+
+    ScrollSpy.prototype.refresh = function () {
+      var that          = this
+      var offsetMethod  = 'offset'
+      var offsetBase    = 0
+
+      this.offsets      = []
+      this.targets      = []
+      this.scrollHeight = this.getScrollHeight()
+
+      if (!$.isWindow(this.$scrollElement[0])) {
+        offsetMethod = 'position'
+        offsetBase   = this.$scrollElement.scrollTop()
+      }
+
+      this.$body
+        .find(this.selector)
+        .map(function () {
+          var $el   = $(this)
+          var href  = $el.data('target') || $el.attr('href')
+          var $href = /^#./.test(href) && $(escapeSelector(href)) // Need to escape selector.
+
+          return ($href
+            && $href.length
+            && $href.is(':visible')
+            && [[$href[offsetMethod]().top + offsetBase, href]]) || null
+        })
+        .sort(function (a, b) { return a[0] - b[0] })
+        .each(function () {
+          that.offsets.push(this[0])
+          that.targets.push(this[1])
+        })
+
+
+    }
+
+    ScrollSpy.prototype.process = function () {
+      var scrollTop    = this.$scrollElement.scrollTop() + this.options.offset
+      var scrollHeight = this.getScrollHeight()
+      var maxScroll    = this.options.offset + scrollHeight - this.$scrollElement.height()
+      var offsets      = this.offsets
+      var targets      = this.targets
+      var activeTarget = this.activeTarget
+      var i
+
+      if (this.scrollHeight != scrollHeight) {
+        this.refresh()
+      }
+
+      if (scrollTop >= maxScroll) {
+        return activeTarget != (i = targets[targets.length - 1]) && this.activate(i)
+      }
+
+      if (activeTarget && scrollTop < offsets[0]) {
+        $(this.selector).trigger('clear.bs.scrollspy')  // Add a custom event.
+        this.activeTarget = null
+        return this.clear()
+      }
+
+      for (i = offsets.length; i--;) {
+        activeTarget != targets[i]
+          && scrollTop >= offsets[i]
+          && (!offsets[i + 1] || scrollTop <= offsets[i + 1])
+          && this.activate(targets[i])
+      }
+    }
+
+    ScrollSpy.prototype.activate = function (target) {
+      this.activeTarget = target
+
+      this.clear()
+
+      var selector = this.selector +
+        '[data-target="' + target + '"],' +
+        this.selector + '[href="' + target + '"]'
+
+      var active = $(selector)
+        .parents('li')
+        .addClass('active')
+
+      if (active.parent('.dropdown-menu').length) {
+        active = active
+          .closest('li.dropdown')
+          .addClass('active')
+      }
+
+      active.trigger('activate.bs.scrollspy')
+    }
+
+    ScrollSpy.prototype.clear = function () {
+      $(this.selector)
+        .parentsUntil(this.options.target, '.active')
+        .removeClass('active')
+    }
+
+
+    // SCROLLSPY PLUGIN DEFINITION
+    // ===========================
+
+    function Plugin(option) {
+      return this.each(function () {
+        var $this   = $(this)
+        var data    = $this.data('bs.scrollspy')
+        var options = typeof option == 'object' && option
+
+        if (!data) $this.data('bs.scrollspy', (data = new ScrollSpy(this, options)))
+        if (typeof option == 'string') data[option]()
+      })
+    }
+
+    var old = $.fn.scrollspy
+
+    $.fn.scrollspy             = Plugin
+    $.fn.scrollspy.Constructor = ScrollSpy
+
+
+    // SCROLLSPY NO CONFLICT
+    // =====================
+
+    $.fn.scrollspy.noConflict = function () {
+      $.fn.scrollspy = old
+      return this
+    }
+
+
+    // SCROLLSPY DATA-API
+    // ==================
+
+    $(window).on('load.bs.scrollspy.data-api', function () {
+      $('[data-spy="scroll"]').each(function () {
+        var $spy = $(this)
+        Plugin.call($spy, $spy.data())
+      })
+    })
+
+  }(jQuery);
+</script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      if ($('.post-toc').html().trim().length > 0 && isDesktop()) {
+        setTimeout(function () {
+          $('.sidebar-toggle').trigger('click');
+        }, 800);
+      }
+    });
+  </script>
+
+
+
+
+  
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"github-io"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+  
+</body>
+</html>

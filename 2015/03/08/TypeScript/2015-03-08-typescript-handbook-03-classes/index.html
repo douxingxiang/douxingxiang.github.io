@@ -1,0 +1,1027 @@
+<!doctype html>
+<html class="theme-next use-motion">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.3.0"/>
+
+
+
+
+	<meta name="keywords" content="TypeScript," />
+
+  <title> TypeScript类 // 这里看见一个世界 </title>
+</head>
+
+<body>
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+    <a href="/" class="brand">
+        <span class="logo">
+          <i class="icon-logo"></i>
+        </span>
+        <span class="site-title">这里看见一个世界</span>
+    </a>
+</h1>
+
+
+  <ul id="menu" class="menu">
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="/">
+          <i class="menu-item-icon icon-home"></i> <br />
+          首页
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="/archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          归档
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="/tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          标签
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-about">
+        <a href="/about">
+          <i class="menu-item-icon icon-about"></i> <br />
+          关于
+        </a>
+      </li>
+    
+  </ul>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+            
+          
+
+          <div id="posts" class="posts-expand">
+            
+  
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              TypeScript类
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          
+            发表于 2015-03-08
+          
+        </span>
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/03/08/TypeScript/2015-03-08-typescript-handbook-03-classes/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/03/08/TypeScript/2015-03-08-typescript-handbook-03-classes/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    
+      <div class="post-body">
+
+        
+        
+
+        
+          <blockquote>
+<p>声明：原文来自<a href="http://www.typescriptlang.org/Handbook#classes" target="_blank" rel="external">TypeScript官网</a>，本文仅作为中文入门之用。</p>
+</blockquote>
+<h1 id="类">类</h1><p>传统的JavaScript将函数和基于原型的继承作为创建重用组件的方式，但是对于那些习惯面向对象方法（类继承功能，对象根据类来创建）的程序员来说会很诡异。从JavaScript的下个版本的ECMAScript 6开始，JavaScript程序员可以使用面向对象基于类（object-oriented class-based）的方法来构建应用了。在TypeScript中，我们现在就允许开发者使用这些技巧来编译成为跨主要浏览器和平台的JavaScript代码，而不用等待下个版本的JavaScript。<br><a id="more"></a></p>
+<h2 id="类-1">类</h2><p>我们看一个简单的基于类的例子：</p>
+<pre><code><span class="keyword">class</span> Greeter {
+    greeting: <span class="built_in">string</span>;
+    <span class="constructor"><span class="keyword">constructor</span>(message: string) </span>{
+        <span class="keyword">this</span>.greeting = message;
+    }
+    greet() {
+        <span class="keyword">return</span> <span class="string">"Hello, "</span> + <span class="keyword">this</span>.greeting;
+    }
+}
+
+<span class="keyword">var</span> greeter = <span class="keyword">new</span> Greeter(<span class="string">"world"</span>);
+</code></pre><p>如果你用过C#或Java，你可能会熟悉这种语法。我们声明一个新类<code>Greeter</code>。这个类有三个成员，一个<code>greeting</code>属性，一个构造器，一个<code>greet</code>方法。</p>
+<p>你会注意到，在类中当我们引用类的成员时会在前面添加<code>this.</code>。这表示成员访问。</p>
+<p>最后一行我们使用<code>new</code>创建了<code>Greeter</code>类的一个实例。它会调用我们前面定义的构造器，根据<code>Greeter</code>来创建一个新对象，然后运行构造器来初始化。</p>
+<h2 id="继承">继承</h2><p>TypeScript中，我们使用通用的面向对象模式。当然，基于类编程中最基本的模式之一就是可以通过继承扩展旧类来创建新类。</p>
+<p>看个例子：</p>
+<pre><code><span class="keyword">class</span> Animal {
+    name:<span class="built_in">string</span>;
+    <span class="constructor"><span class="keyword">constructor</span>(theName: string) </span>{ <span class="keyword">this</span>.name = theName; }
+    move(meters: <span class="built_in">number</span> = <span class="number">0</span>) {
+        alert(<span class="keyword">this</span>.name + <span class="string">" moved "</span> + meters + <span class="string">"m."</span>);
+    }
+}
+
+<span class="keyword">class</span> Snake extends Animal {
+    <span class="constructor"><span class="keyword">constructor</span>(name: string) </span>{ <span class="keyword">super</span>(name); }
+    move(meters = <span class="number">5</span>) {
+        alert(<span class="string">"Slithering..."</span>);
+        <span class="keyword">super</span>.move(meters);
+    }
+}
+
+<span class="keyword">class</span> Horse extends Animal {
+    <span class="constructor"><span class="keyword">constructor</span>(name: string) </span>{ <span class="keyword">super</span>(name); }
+    move(meters = <span class="number">45</span>) {
+        alert(<span class="string">"Galloping..."</span>);
+        <span class="keyword">super</span>.move(meters);
+    }
+}
+
+<span class="keyword">var</span> sam = <span class="keyword">new</span> Snake(<span class="string">"Sammy the Python"</span>);
+<span class="keyword">var</span> tom: Animal = <span class="keyword">new</span> Horse(<span class="string">"Tommy the Palomino"</span>);
+
+sam.move();
+tom.move(<span class="number">34</span>);
+</code></pre><p>这个例子包含了TypeScript中与其他语言通用的部分继承特性。这里我们使用<code>extends</code>关键词来创建子类。你可以看到<code>Horse</code>和<code>Snake</code>子类继承了基类<code>Animal</code>，然后可以访问其特性。</p>
+<p>这个例子同时也展示了，可以在子类中创建特定方法来覆盖基类中的方法。这里<code>Snake</code>和<code>Horse</code>都创建了<code>move</code>方法覆盖了<code>Animal</code>中的<code>move</code>，使得每个类的功能都是特定的。</p>
+<h2 id="private_/public修饰符">private /public修饰符</h2><h3 id="默认public">默认public</h3><p>你可能注意到上面的例子中我们没必要使用<code>public</code>来让类中的成员可见。类似C#的语言要求每个成员都要加上<code>public</code>标签才可见。在TypeScript，每个成员默认都是公共的。</p>
+<p>你可能仍然想标记成员为<code>private</code>，这样你可以控制类外部公共可见的东西。我们可以重写上节的<code>Animal</code>类：</p>
+<pre><code><span class="keyword">class</span> Animal {
+    <span class="keyword">private</span> name:<span class="built_in">string</span>;
+    <span class="constructor"><span class="keyword">constructor</span>(theName: string) </span>{ <span class="keyword">this</span>.name = theName; }
+    move(meters: <span class="built_in">number</span>) {
+        alert(<span class="keyword">this</span>.name + <span class="string">" moved "</span> + meters + <span class="string">"m."</span>);
+    }
+}
+</code></pre><h3 id="理解private">理解private</h3><p>TypeScript是个结构化类型系统。当我们比较两个不同类型时，不考虑它们的来源，如果每个成员都兼容，那么我们说这些类型是兼容的。</p>
+<p>当比较包含<code>private</code>成员的类型时，我们会区别对待。对两个兼容的类型，如果其中一个包含<code>private</code>成员，那么另一个必须包含来自相同声明的私有成员。</p>
+<p>我们看个例子来更好地理解实际中的用法：</p>
+<pre><code><span class="keyword">class</span> Animal {
+    <span class="keyword">private</span> name:<span class="built_in">string</span>;
+    <span class="constructor"><span class="keyword">constructor</span>(theName: string) </span>{ <span class="keyword">this</span>.name = theName; }
+}
+
+<span class="keyword">class</span> Rhino extends Animal {
+    <span class="constructor"><span class="keyword">constructor</span>() </span>{ <span class="keyword">super</span>(<span class="string">"Rhino"</span>); }
+}
+
+<span class="keyword">class</span> Employee {
+    <span class="keyword">private</span> name:<span class="built_in">string</span>;
+    <span class="constructor"><span class="keyword">constructor</span>(theName: string) </span>{ <span class="keyword">this</span>.name = theName; }   
+}
+
+<span class="keyword">var</span> animal = <span class="keyword">new</span> Animal(<span class="string">"Goat"</span>);
+<span class="keyword">var</span> rhino = <span class="keyword">new</span> Rhino();
+<span class="keyword">var</span> employee = <span class="keyword">new</span> Employee(<span class="string">"Bob"</span>);
+
+animal = rhino;
+animal = employee; <span class="comment">//错误：Animal和Employee不兼容</span>
+</code></pre><p>这个例子中，有一个<code>Animal</code>和一个<code>Rhino</code>，<code>Rhino</code>是<code>Animal</code>的子类。还有一个<code>Employee</code>，从形式上看与<code>Animal</code>相同。我们创建这些类的实例，然后尝试相互赋值来看看会发生什么。由于<code>Animal</code>和<code>Rhino</code>共享<code>Animal</code>中私有部分<code>private name: string</code>声明，它们是兼容的。但是，<code>Employee</code>不一样。当我们尝试将<code>Employee</code>赋值给一个<code>Animal</code>时，我们得到一个类型不兼容的错误。尽管<code>Employee</code>同样包含名称为<code>name</code>的私有成员，但它与<code>Animal</code>中创建的那个不同。</p>
+<h3 id="参数属性">参数属性</h3><p><code>public</code>和<code>private</code>关键词还提供了一种简写，通过创建参数属性来创建和初始化类中的成员。这种属性可以让你一步就可以创建和初始化成员。这里有个上面例子更进一步的版本。注意我们如何去掉<code>theName</code>的，只在构造器中使用了简写的<code>private name: string</code>参数来创建和初始化<code>name</code>成员。</p>
+<pre><code><span class="keyword">class</span> Animal {
+    <span class="constructor"><span class="keyword">constructor</span>(private name: string) </span>{ }
+    move(meters: <span class="built_in">number</span>) {
+        alert(<span class="keyword">this</span>.name + <span class="string">" moved "</span> + meters + <span class="string">"m."</span>);
+    }
+}
+</code></pre><p>按照这种方式使用<code>private</code>可以创建并初始化私有成员，<code>public</code>类似。</p>
+<h2 id="访问器">访问器</h2><p>TypeScript支持getter/setter来拦截对对象成员的访问。这提供了一种细粒度的方式来控制对每个对象<br>成员的访问。</p>
+<p>我们将一个简单的类转换为使用<code>get</code>和<code>set</code>的形式。首先，我们从一个不包含getter和setter的例子开始。</p>
+<pre><code><span class="keyword">class</span> <span class="title">Employee</span> {
+    fullName: <span class="keyword">string</span>;
+}
+
+<span class="keyword">var</span> employee = <span class="keyword">new</span> Employee();
+employee.fullName = <span class="string">"Bob Smith"</span>;
+<span class="keyword">if</span> (employee.fullName) {
+    alert(employee.fullName);
+}
+</code></pre><p>虽然允许大家直接随机地设置<code>fullName</code>是很方便的，但是一旦人们一时冲动改了名字，就可能出现问题。</p>
+<p>这个版本中，我们在允许他们修改employee之前检查他们是否有可用密码。我们先将对<code>fullName</code>的访问替换为<code>set</code>来检查密码。我们添加了对应的<code>get</code>来让上例继续无缝地工作。</p>
+<pre><code><span class="keyword">var</span> passcode = <span class="string">"secret passcode"</span>;
+
+<span class="keyword">class</span> <span class="title">Employee</span> {
+    <span class="keyword">private</span> _fullName: <span class="keyword">string</span>;
+
+    <span class="function"><span class="keyword">get</span> <span class="title">fullName</span><span class="params">()</span>: <span class="keyword">string</span> </span>{
+        <span class="keyword">return</span> <span class="keyword">this</span>._fullName;
+    }
+
+    <span class="function"><span class="keyword">set</span> <span class="title">fullName</span><span class="params">(newName: <span class="keyword">string</span>)</span> </span>{
+        <span class="keyword">if</span> (passcode &amp;&amp; passcode == <span class="string">"secret passcode"</span>) {
+            <span class="keyword">this</span>._fullName = newName;
+        }
+        <span class="keyword">else</span> {
+            alert(<span class="string">"Error: Unauthorized update of employee!"</span>);
+        }
+    }
+}
+
+<span class="keyword">var</span> employee = <span class="keyword">new</span> Employee();
+employee.fullName = <span class="string">"Bob Smith"</span>;
+<span class="keyword">if</span> (employee.fullName) {
+    alert(employee.fullName);
+}
+</code></pre><p>为了证明访问器检查了密码，我们修改下密码来看下当它不匹配时，是否会有个提示框警告我们没有权限更新employee。</p>
+<p>注意：访问器需要设置编译器输出ECMAScript 5。</p>
+<h2 id="静态属性">静态属性</h2><p>现在我们只讨论了类的<em>实例</em>成员，它们会在实例化的时候出现在对象中。我们还可以创建类的<em>静态</em>成员，它们在类本身中可见而不是在实例中。这个例子中，我们在<code>origin</code>前使用<code>static</code>，因为它是所有各grid的通用值。每个实例通过在前面添加类名来访问这个值。类似实例访问中在前面放<code>this.</code>，这里静态访问中我们在前面添加<code>Grid.</code>。</p>
+<pre><code><span class="keyword">class</span> Grid {
+    static origin = {x: <span class="number">0</span>, y: <span class="number">0</span>};
+    calculateDistanceFromOrigin(point: {x: <span class="built_in">number</span>; y: <span class="built_in">number</span>;}) {
+        <span class="keyword">var</span> xDist = (point.x - Grid.origin.x);
+        <span class="keyword">var</span> yDist = (point.y - Grid.origin.y);
+        <span class="keyword">return</span> <span class="built_in">Math</span>.sqrt(xDist * xDist + yDist * yDist) / <span class="keyword">this</span>.scale;
+    }
+    <span class="constructor"><span class="keyword">constructor</span> (public scale: number) </span>{ }
+}
+
+<span class="keyword">var</span> grid1 = <span class="keyword">new</span> Grid(<span class="number">1.0</span>);  <span class="comment">// 1x scale</span>
+<span class="keyword">var</span> grid2 = <span class="keyword">new</span> Grid(<span class="number">5.0</span>);  <span class="comment">// 5x scale</span>
+
+alert(grid1.calculateDistanceFromOrigin({x: <span class="number">10</span>, y: <span class="number">10</span>}));
+alert(grid2.calculateDistanceFromOrigin({x: <span class="number">10</span>, y: <span class="number">10</span>}));
+</code></pre><h2 id="高级技巧">高级技巧</h2><h3 id="构造器函数">构造器函数</h3><p>在TypeScript中声明一个类时，你事实上同时创建了多个声明。首先是类<em>实例</em>的类型。</p>
+<pre><code><span class="keyword">class</span> Greeter {
+    greeting: <span class="built_in">string</span>;
+    <span class="constructor"><span class="keyword">constructor</span>(message: string) </span>{
+        <span class="keyword">this</span>.greeting = message;
+    }
+    greet() {
+        <span class="keyword">return</span> <span class="string">"Hello, "</span> + <span class="keyword">this</span>.greeting;
+    }
+}
+
+<span class="keyword">var</span> greeter: Greeter;
+greeter = <span class="keyword">new</span> Greeter(<span class="string">"world"</span>);
+alert(greeter.greet());
+</code></pre><p>这里，当写下<code>var greeter: Greeter</code>时，我们将<code>Greeter</code>作为类<code>Greeter</code>实例的类型。这几乎是其他面向对象语言程序员的第二本能。</p>
+<p>我们也可以调用<em>构造器函数</em>来创建另一个值。它就是我们<code>new</code>类实例时所调用的函数。为了看看实际上它长什么样，我们看看上例生成的JavaScript：</p>
+<pre><code><span class="keyword">var</span> Greeter = (<span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>{
+    <span class="function"><span class="keyword">function</span> <span class="title">Greeter</span><span class="params">(message)</span> </span>{
+        <span class="keyword">this</span>.greeting = message;
+    }
+    Greeter.prototype.greet = <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>{
+        <span class="keyword">return</span> <span class="string">"Hello, "</span> + <span class="keyword">this</span>.greeting;
+    };
+    <span class="keyword">return</span> Greeter;
+})();
+
+<span class="keyword">var</span> greeter;
+greeter = <span class="keyword">new</span> Greeter(<span class="string">"world"</span>);
+alert(greeter.greet());
+</code></pre><p>这里<code>var Greeter</code>将被赋值为构造器函数。当调用<code>new</code>并运行该函数时，我们得到了类的一个实例。这个构造函数同时包含了类中的所有静态成员。思考每个类的另一种方式就是认为它们都有<em>实例</em>部分和<em>静态</em>部分。</p>
+<p>我们稍微修改下例子来看看区别：</p>
+<pre><code><span class="keyword">class</span> <span class="title">Greeter</span> {
+    <span class="keyword">static</span> standardGreeting = <span class="string">"Hello, there"</span>;
+    greeting: <span class="keyword">string</span>;
+    greet() {
+        <span class="keyword">if</span> (<span class="keyword">this</span>.greeting) {
+            <span class="keyword">return</span> <span class="string">"Hello, "</span> + <span class="keyword">this</span>.greeting;
+        }
+        <span class="keyword">else</span> {
+            <span class="keyword">return</span> Greeter.standardGreeting;
+        }
+    }
+}
+
+<span class="keyword">var</span> greeter1: Greeter;
+greeter1 = <span class="keyword">new</span> Greeter();
+alert(greeter1.greet());
+
+<span class="keyword">var</span> greeterMaker: <span class="keyword">typeof</span> Greeter = Greeter;
+greeterMaker.standardGreeting = <span class="string">"Hey there!"</span>;
+<span class="keyword">var</span> greeter2:Greeter = <span class="keyword">new</span> greeterMaker();
+alert(greeter2.greet());
+</code></pre><p>这个例子中，<code>greeter1</code>跟之前的功能类似。我们实例化<code>Greeter</code>类，然后使用该对象。这些我们之前都看到过。</p>
+<p>接着，我们直接使用类。这里我们创建了一个新的<code>greeterMaker</code>变量。这个变量将会保存类本身，或者换种说法，构造器函数。这里我们使用<code>typeof Greeter</code>，意思是“告诉我Greeter类的类型”而不是实例的类型。或者，更准确地讲，“告诉我Greeter符号的类型”，它是构造函数的类型。这个类型将包含Greeter的所有静态成员，还有生成Greeter类实例的构造器。我们对<code>greeterMaker</code>使用<code>new</code>，生成了<code>Greeter</code>的新实例并像之前一样调用它们。</p>
+<h3 id="作为接口使用类">作为接口使用类</h3><p>上节中我们说过，类声明生成了两种东西：表示类实例的类型和构造函数。由于类创建了类型，你可以在使用接口的地方使用它们。</p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">Point</span> {</span>
+<span class="label">    x:</span> number;
+<span class="label">    y:</span> number;
+}
+
+<span class="class"><span class="keyword">interface</span> <span class="title">Point3d</span> <span class="keyword">extends</span> <span class="title">Point</span> {</span>
+<span class="label">    z:</span> number;
+}
+
+var <span class="string">point3d:</span> Point3d = {<span class="string">x:</span> <span class="number">1</span>, <span class="string">y:</span> <span class="number">2</span>, <span class="string">z:</span> <span class="number">3</span>};
+</code></pre>
+        
+      </div>
+    
+
+    
+      <div class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/TypeScript/">
+                #TypeScript
+              </a>
+            
+          </div>
+        
+
+        
+          <div class="post-nav">
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2015/03/08/TypeScript/2015-03-08-typescript-handbook-02-interfaces/">TypeScript接口</a>
+              
+            </div>
+          </div>
+        
+
+        
+        
+      </div>
+    
+  </div>
+
+
+
+  
+    <div class="comments" id="comments">
+      
+        <div class="ds-thread" data-thread-key="2015/03/08/TypeScript/2015-03-08-typescript-handbook-03-classes/"
+             data-title="TypeScript类" data-url="http://douxingxiang.github.io/2015/03/08/TypeScript/2015-03-08-typescript-handbook-03-classes/">
+        </div>
+
+      
+    </div>
+  
+
+          </div>
+
+          
+        </div>
+
+        
+<div class="sidebar-toggle">
+  <div class="sidebar-toggle-line-wrap">
+    <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+    <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+  </div>
+</div>
+
+<div id="sidebar" class="sidebar">
+  <div class="sidebar-inner">
+
+    
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview" data-target="site-overview">
+          站点概览
+        </li>
+      </ul>
+    
+
+    <div class="site-overview">
+      <div class="site-author motion-element">
+        <img class="site-author-image" src="/images/douxingxiang.jpg" alt="douxingxiang" />
+        <p class="site-author-name">douxingxiang</p>
+      </div>
+      <p class="site-description motion-element"></p>
+      <div class="site-state motion-element">
+        <div class="site-state-item site-state-posts">
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </div>
+        <div class="site-state-item site-state-tags">
+            <span class="site-state-item-count">18</span>
+            <span class="site-state-item-name">标签</span>
+        </div>
+        <div class="site-state-item site-state-pages">
+            <span class="site-state-item-count">2</span>
+            <span class="site-state-item-name">页面</span>
+        </div>
+      </div>
+
+      
+
+      <div class="social-info motion-element">
+        
+          
+            <span class="social-item">
+              <a href="https://github.com/douxingxiang">GitHub</a>
+            </span>
+          
+            <span class="social-item">
+              <a href="http://weibo.com/hitdxx">Weibo</a>
+            </span>
+          
+        
+      </div>
+
+      
+      
+        <div class="cc-license motion-element">
+          <a href="http://creativecommons.org/licenses/by/4.0" class="cc-opacity" target="_blank">
+            <img src="/images/cc-by.svg" alt="Creative Commons" />
+          </a>
+        </div>
+      
+
+    </div>
+
+    
+      <div class="post-toc-wrap sidebar-panel-active">
+        <div class="post-toc-indicator-top post-toc-indicator"></div>
+        <div class="post-toc">
+          <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#类"><span class="nav-number">1.</span> <span class="nav-text">类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#类-1"><span class="nav-number">1.1.</span> <span class="nav-text">类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#继承"><span class="nav-number">1.2.</span> <span class="nav-text">继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#private_/public修饰符"><span class="nav-number">1.3.</span> <span class="nav-text">private /public修饰符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#默认public"><span class="nav-number">1.3.1.</span> <span class="nav-text">默认public</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#理解private"><span class="nav-number">1.3.2.</span> <span class="nav-text">理解private</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数属性"><span class="nav-number">1.3.3.</span> <span class="nav-text">参数属性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#访问器"><span class="nav-number">1.4.</span> <span class="nav-text">访问器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#静态属性"><span class="nav-number">1.5.</span> <span class="nav-text">静态属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高级技巧"><span class="nav-number">1.6.</span> <span class="nav-text">高级技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构造器函数"><span class="nav-number">1.6.1.</span> <span class="nav-text">构造器函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#作为接口使用类"><span class="nav-number">1.6.2.</span> <span class="nav-text">作为接口使用类</span></a></li></ol></li></ol></li></ol>
+        </div>
+        <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+      </div>
+    
+
+  </div>
+</div>
+
+
+      </div>
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp; 
+  2015
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">douxingxiang</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 - <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT</a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(".fancybox").fancybox();
+    });
+  </script>
+
+  <script type="text/javascript">
+  function hasMobileUA () {
+    var nav = window.navigator;
+    var ua = nav.userAgent;
+    var pa = /iPad|iPhone|Android|Opera Mini|BlackBerry|webOS|UCWEB|Blazer|PSP|IEMobile|Symbian/g;
+
+    return pa.test(ua);
+  }
+
+  function isDesktop () {
+    return screen.width > 991 && !hasMobileUA();
+  }
+
+  function isTablet () {
+    return screen.width < 992 && screen.width > 767 && hasMobileUA();
+  }
+
+  function isMobile () {
+    return screen.width < 767 && hasMobileUA();
+  }
+
+  function escapeSelector (selector) {
+    return selector.replace(/[!"$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&")
+  }
+</script>
+
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  
+
+  <script type="text/javascript" id="motion.global">
+  $(document).ready(function () {
+    var body = $('body');
+    var isSidebarVisible = false;
+    var sidebarToggle = $('.sidebar-toggle');
+    var sidebarToggleLine1st = $('.sidebar-toggle-line-first')
+    var sidebarToggleLine2nd = $('.sidebar-toggle-line-middle');
+    var sidebarToggleLine3rd = $('.sidebar-toggle-line-last');
+    var sidebar = $('.sidebar');
+
+    var SIDEBAR_WIDTH = '320px';
+    var SIDEBAR_DISPLAY_DURATION = 300;
+
+    var sidebarToogleLineStatusInit = {width: '100%', opacity: 1, left: 0, rotateZ: 0, top: 0};
+
+    var sidebarToggleLine1stStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine1stStatusArrow = {width: '50%', rotateZ: '-45deg', top: '2px'};
+    var sidebarToogleLine1stStatusClose = {width: '100%', rotateZ: '-45deg', top: '5px'};
+
+    var sidebarToggleLine2ndStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine2ndStatusArrow = {width: '90%'};
+    var sidebarToogleLine2ndStatusClose = {opacity: 0};
+
+    var sidebarToggleLine3rdStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine3rdStatusArrow = {width: '50%', rotateZ: '45deg', top: '-2px'};
+    var sidebarToogleLine3rdStatusClose = {width: '100%', rotateZ: '45deg', top: '-5px'};
+
+    sidebatToggleMotion();
+    postsListMotion();
+    backToTopMotion();
+
+
+    $(document)
+      .on('sidebar.isShowing', function () {
+        isDesktop() && body.velocity(
+          {paddingRight: SIDEBAR_WIDTH},
+          SIDEBAR_DISPLAY_DURATION
+        );
+        sidebarContentMotion();
+      })
+      .on('sidebar.isHiding', function () {});
+
+
+    function backToTopMotion () {
+      var b2top = $('.back-to-top');
+      b2top.on('click', function () {
+        body.velocity('scroll');
+      });
+    }
+
+    function sidebarShowMotion () {
+
+      sidebarToggleLine1st.velocity(sidebarToogleLine1stStatusClose);
+      sidebarToggleLine2nd.velocity(sidebarToogleLine2ndStatusClose);
+      sidebarToggleLine3rd.velocity(sidebarToogleLine3rdStatusClose);
+
+      sidebar.velocity({width: SIDEBAR_WIDTH}, {
+        display: 'block',
+        duration: SIDEBAR_DISPLAY_DURATION,
+        complete: function () {
+          sidebar.addClass('sidebar-active');
+          sidebar.trigger('sidebar.didShow');
+        }
+      });
+      sidebar.trigger('sidebar.isShowing');
+    }
+
+    function sidebarHideMotion () {
+      isDesktop() && body.velocity({paddingRight: 0});
+      sidebar.velocity('reverse');
+
+      sidebarToggleLine1st.velocity(sidebarToggleLine1stStatusInit);
+      sidebarToggleLine2nd.velocity(sidebarToggleLine2ndStatusInit);
+      sidebarToggleLine3rd.velocity(sidebarToggleLine3rdStatusInit);
+
+      sidebar.removeClass('sidebar-active');
+      sidebar.trigger('sidebar.isHiding');
+    };
+
+    function sidebarContentMotion () {
+      $('.sidebar .motion-element').velocity(
+        'transition.slideRightIn',
+        {stagger: 50, drag: true}
+      );
+    }
+
+    function postsListMotion () {
+      var postMotionOptions = postMotionOptions || {stagger: 300, drag: true};
+      $('.post').velocity('transition.slideDownIn', postMotionOptions);
+    }
+
+    function sidebatToggleMotion () {
+      sidebarToggle.on('click', function () {
+        isSidebarVisible ? sidebarHideMotion() : sidebarShowMotion();
+        isSidebarVisible = !isSidebarVisible;
+      });
+
+      sidebarToggle.hover(function () {
+        if (isSidebarVisible) {return}
+        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusArrow);
+        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusArrow);
+        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusArrow);
+      }, function () {
+        if (isSidebarVisible) {return}
+        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusInit);
+        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusInit);
+        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusInit);
+      });
+    }
+  });
+
+</script>
+
+
+
+
+
+  
+  
+<script type="text/javascript" id="bootstrap.scrollspy.custom">
+  /* ========================================================================
+  * Bootstrap: scrollspy.js v3.3.2
+  * http://getbootstrap.com/javascript/#scrollspy
+  * ========================================================================
+  * Copyright 2011-2015 Twitter, Inc.
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+  * ======================================================================== */
+
+  /**
+   * Custom by iissnan
+   *
+   * - Add a `clear.bs.scrollspy` event.
+   * - Esacpe targets selector.
+   */
+
+
+  +function ($) {
+    'use strict';
+
+    // SCROLLSPY CLASS DEFINITION
+    // ==========================
+
+    function ScrollSpy(element, options) {
+      this.$body          = $(document.body)
+      this.$scrollElement = $(element).is(document.body) ? $(window) : $(element)
+      this.options        = $.extend({}, ScrollSpy.DEFAULTS, options)
+      this.selector       = (this.options.target || '') + ' .nav li > a'
+      this.offsets        = []
+      this.targets        = []
+      this.activeTarget   = null
+      this.scrollHeight   = 0
+
+      this.$scrollElement.on('scroll.bs.scrollspy', $.proxy(this.process, this))
+      this.refresh()
+      this.process()
+    }
+
+    ScrollSpy.VERSION  = '3.3.2'
+
+    ScrollSpy.DEFAULTS = {
+      offset: 10
+    }
+
+    ScrollSpy.prototype.getScrollHeight = function () {
+      return this.$scrollElement[0].scrollHeight || Math.max(this.$body[0].scrollHeight, document.documentElement.scrollHeight)
+    }
+
+    ScrollSpy.prototype.refresh = function () {
+      var that          = this
+      var offsetMethod  = 'offset'
+      var offsetBase    = 0
+
+      this.offsets      = []
+      this.targets      = []
+      this.scrollHeight = this.getScrollHeight()
+
+      if (!$.isWindow(this.$scrollElement[0])) {
+        offsetMethod = 'position'
+        offsetBase   = this.$scrollElement.scrollTop()
+      }
+
+      this.$body
+        .find(this.selector)
+        .map(function () {
+          var $el   = $(this)
+          var href  = $el.data('target') || $el.attr('href')
+          var $href = /^#./.test(href) && $(escapeSelector(href)) // Need to escape selector.
+
+          return ($href
+            && $href.length
+            && $href.is(':visible')
+            && [[$href[offsetMethod]().top + offsetBase, href]]) || null
+        })
+        .sort(function (a, b) { return a[0] - b[0] })
+        .each(function () {
+          that.offsets.push(this[0])
+          that.targets.push(this[1])
+        })
+
+
+    }
+
+    ScrollSpy.prototype.process = function () {
+      var scrollTop    = this.$scrollElement.scrollTop() + this.options.offset
+      var scrollHeight = this.getScrollHeight()
+      var maxScroll    = this.options.offset + scrollHeight - this.$scrollElement.height()
+      var offsets      = this.offsets
+      var targets      = this.targets
+      var activeTarget = this.activeTarget
+      var i
+
+      if (this.scrollHeight != scrollHeight) {
+        this.refresh()
+      }
+
+      if (scrollTop >= maxScroll) {
+        return activeTarget != (i = targets[targets.length - 1]) && this.activate(i)
+      }
+
+      if (activeTarget && scrollTop < offsets[0]) {
+        $(this.selector).trigger('clear.bs.scrollspy')  // Add a custom event.
+        this.activeTarget = null
+        return this.clear()
+      }
+
+      for (i = offsets.length; i--;) {
+        activeTarget != targets[i]
+          && scrollTop >= offsets[i]
+          && (!offsets[i + 1] || scrollTop <= offsets[i + 1])
+          && this.activate(targets[i])
+      }
+    }
+
+    ScrollSpy.prototype.activate = function (target) {
+      this.activeTarget = target
+
+      this.clear()
+
+      var selector = this.selector +
+        '[data-target="' + target + '"],' +
+        this.selector + '[href="' + target + '"]'
+
+      var active = $(selector)
+        .parents('li')
+        .addClass('active')
+
+      if (active.parent('.dropdown-menu').length) {
+        active = active
+          .closest('li.dropdown')
+          .addClass('active')
+      }
+
+      active.trigger('activate.bs.scrollspy')
+    }
+
+    ScrollSpy.prototype.clear = function () {
+      $(this.selector)
+        .parentsUntil(this.options.target, '.active')
+        .removeClass('active')
+    }
+
+
+    // SCROLLSPY PLUGIN DEFINITION
+    // ===========================
+
+    function Plugin(option) {
+      return this.each(function () {
+        var $this   = $(this)
+        var data    = $this.data('bs.scrollspy')
+        var options = typeof option == 'object' && option
+
+        if (!data) $this.data('bs.scrollspy', (data = new ScrollSpy(this, options)))
+        if (typeof option == 'string') data[option]()
+      })
+    }
+
+    var old = $.fn.scrollspy
+
+    $.fn.scrollspy             = Plugin
+    $.fn.scrollspy.Constructor = ScrollSpy
+
+
+    // SCROLLSPY NO CONFLICT
+    // =====================
+
+    $.fn.scrollspy.noConflict = function () {
+      $.fn.scrollspy = old
+      return this
+    }
+
+
+    // SCROLLSPY DATA-API
+    // ==================
+
+    $(window).on('load.bs.scrollspy.data-api', function () {
+      $('[data-spy="scroll"]').each(function () {
+        var $spy = $(this)
+        Plugin.call($spy, $spy.data())
+      })
+    })
+
+  }(jQuery);
+</script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      if ($('.post-toc').html().trim().length > 0 && isDesktop()) {
+        setTimeout(function () {
+          $('.sidebar-toggle').trigger('click');
+        }, 800);
+      }
+    });
+  </script>
+
+
+
+
+  
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"github-io"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+  
+</body>
+</html>
